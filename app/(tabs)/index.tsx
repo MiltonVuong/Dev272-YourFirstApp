@@ -1,42 +1,68 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, ScrollView, FlatList, StyleSheet } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const DATA = [
+  { id: '1', title: 'Wake up' },
+  { id: '2', title: 'Breakfast' },
+  { id: '3', title: 'Independent play' },
+  { id: '4', title: 'Snack time' },
+  { id: '5', title: 'Out door time' },
+  { id: '6', title: 'Nap time' },
+  { id: '7', title: 'Snack time' },
+  { id: '8', title: 'Independent play' },
+  { id: '9', title: 'Dinner time' },
+  { id: '10', title: 'Sleep time' },
+];
 
-export default function HomeScreen() {
+export default function () {
+  const [search, setSearch] = useState('');
+  const [filteredData, setFilteredData] = useState(DATA);
+
+  const handleSearch = () => {
+    const filtered = DATA.filter(item => item.title.toLowerCase().includes(search.toLowerCase()));
+    setFilteredData(filtered);
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">New Title Test</ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>2Y Routine</Text>
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Search..."
+        value={search}
+        onChangeText={setSearch}
+      />
+      <Button title="Search" onPress={handleSearch} />
+      <FlatList
+        data={filteredData}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => <Text style={styles.item}>{item.title}</Text>}
+      />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flexGrow: 1,
+    padding: 16,
+    backgroundColor: '#f8f8f8',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  searchBar: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 16,
+    paddingHorizontal: 8,
+  },
+  item: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
 });
