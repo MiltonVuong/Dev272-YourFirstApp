@@ -1,15 +1,18 @@
+//app\(tabs)\_layout
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { HapticTab } from '../../components/HapticTab';
+import { IconSymbol } from '../../components/ui/IconSymbol';
+import TabBarBackground from '../../components/ui/TabBarBackground';
+import { Colors } from '../../constants/Colors';
+import { useColorScheme } from '../../hooks/useColorScheme';
+import { useTasks } from '../_layout.tsx'; // Corrected import path
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { tasks } = useTasks(); // Consume the context
 
   return (
     <Tabs
@@ -27,7 +30,7 @@ export default function TabLayout() {
         }),
       }}>
       <Tabs.Screen
-        name="index"
+        name="(home)"
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,

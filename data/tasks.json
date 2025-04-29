@@ -1,0 +1,12 @@
+[
+  { "id": "1", "title": "Wake up" },
+  { "id": "2", "title": "Breakfast" },
+  { "id": "3", "title": "Independent play" },
+  { "id": "4", "title": "Snack time" },
+  { "id": "5", "title": "Outdoor time" },
+  { "id": "6", "title": "Nap time" },
+  { "id": "7", "title": "Snack time" },
+  { "id": "8", "title": "Independent play" },
+  { "id": "9", "title": "Dinner time" },
+  { "id": "10", "title": "Sleep time" }
+]
