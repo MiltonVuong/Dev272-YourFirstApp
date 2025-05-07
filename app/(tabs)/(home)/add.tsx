@@ -1,36 +1,42 @@
+// app/(tabs)/(home)/add.tsx
+
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTasks } from '../../../contexts/TaskContext';
 import { useThemeColor } from '../../../hooks/useThemeColor';
 
-export default function AddTask() {
+export default function AddTaskScreen() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [errors, setErrors] = useState<{ title?: string; dueDate?: string }>({});
+
   const { tasks, setTasks } = useTasks();
   const router = useRouter();
 
+  // Themed colors
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'icon');
   const errorColor = useThemeColor({ light: 'red', dark: '#ff6b6b' }, 'text');
 
+  // Format input into hh:mm AM/PM MM-DD-YYYY
   const formatDateTimeInput = (input: string) => {
     const cleaned = input.replace(/[^0-9APMapm]/g, '').toUpperCase();
     let formatted = '';
 
-    if (cleaned.length >= 1) formatted += cleaned.slice(0, 2); // HH
-    if (cleaned.length >= 3) formatted += ':' + cleaned.slice(2, 4); // MM
-    if (cleaned.length >= 5) formatted += ' ' + cleaned.slice(4, 6); // AM/PM
-    if (cleaned.length >= 7) formatted += ' ' + cleaned.slice(6, 8); // MM
-    if (cleaned.length >= 9) formatted += '-' + cleaned.slice(8, 10); // DD
-    if (cleaned.length >= 11) formatted += '-' + cleaned.slice(10, 14); // YYYY
+    if (cleaned.length >= 1) formatted += cleaned.slice(0, 2);
+    if (cleaned.length >= 3) formatted += ':' + cleaned.slice(2, 4);
+    if (cleaned.length >= 5) formatted += ' ' + cleaned.slice(4, 6);
+    if (cleaned.length >= 7) formatted += ' ' + cleaned.slice(6, 8);
+    if (cleaned.length >= 9) formatted += '-' + cleaned.slice(8, 10);
+    if (cleaned.length >= 11) formatted += '-' + cleaned.slice(10, 14);
 
     return formatted;
   };
 
+  // Validate form inputs
   const validate = () => {
     const newErrors: typeof errors = {};
     if (!title.trim()) newErrors.title = 'Title is required.';
@@ -44,6 +50,7 @@ export default function AddTask() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Handle form submission
   const handleSubmit = () => {
     if (!validate()) return;
 
@@ -109,5 +116,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
+
 
 

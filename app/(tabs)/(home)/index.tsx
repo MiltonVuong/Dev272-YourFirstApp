@@ -1,30 +1,34 @@
+// app/(tabs)/(home)/index.tsx
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, ScrollView, FlatList, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTasks } from '../../../contexts/TaskContext';
 import { useThemeColor } from '../../../hooks/useThemeColor';
 
-export default function App() {
+export default function HomeScreen() {
   const [search, setSearch] = useState('');
-  const { tasks, setTasks } = useTasks();
-  const [filteredData, setFilteredData] = useState(tasks);
+  const { tasks } = useTasks();
+  const [filteredTasks, setFilteredTasks] = useState(tasks);
   const router = useRouter();
 
-  // Use theme colors
+  // Themed colors
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'icon');
 
+  // Filter tasks based on search input
   useEffect(() => {
-    const filtered = tasks.filter(item =>
-      item.title.toLowerCase().includes(search.toLowerCase())
+    const filtered = tasks.filter(task =>
+      task.title.toLowerCase().includes(search.toLowerCase())
     );
-    setFilteredData(filtered);
+    setFilteredTasks(filtered);
   }, [search, tasks]);
 
   return (
     <ScrollView contentContainerStyle={[styles.container, { backgroundColor }]}>
       <Text style={[styles.title, { color: textColor }]}>2Y Routine</Text>
+
       <TextInput
         style={[
           styles.searchBar,
@@ -39,16 +43,18 @@ export default function App() {
         value={search}
         onChangeText={setSearch}
       />
+
       <Button title="Search" onPress={() => {}} />
       <Button title="Add New Task" onPress={() => router.push('/(tabs)/(home)/add')} />
+
       <FlatList
-        data={filteredData}
+        data={filteredTasks}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View style={[styles.itemContainer, { borderBottomColor: borderColor }]}>
-            <Text style={[styles.item, { color: textColor }]}>{item.title}</Text>
+            <Text style={[styles.itemText, { color: textColor }]}>{item.title}</Text>
             <Button
-              title="Press me"
+              title="View"
               onPress={() =>
                 router.push({ pathname: '/(tabs)/(home)/[title]', params: { title: item.title } })
               }
@@ -83,7 +89,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
   },
-  item: {
+  itemText: {
     fontSize: 18,
   },
 });

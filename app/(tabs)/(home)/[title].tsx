@@ -1,17 +1,21 @@
+// app/(tabs)/(home)/[title].tsx
+
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useTasks } from '../../../contexts/TaskContext';
 import { useThemeColor } from '../../../hooks/useThemeColor';
 
-export default function TitlePage() {
+export default function TaskDetailScreen() {
   const router = useRouter();
   const { title } = useLocalSearchParams<{ title: string }>();
   const { tasks } = useTasks();
 
+  // Themed colors
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
   const errorColor = useThemeColor({ light: 'red', dark: '#ff6b6b' }, 'text');
 
+  // Find task by title
   const task = tasks.find(t => t.title === title);
 
   return (
@@ -19,6 +23,7 @@ export default function TitlePage() {
       {task ? (
         <>
           <Text style={[styles.title, { color: textColor }]}>{task.title}</Text>
+
           <Text style={[styles.label, { color: textColor }]}>Description:</Text>
           <Text style={[styles.text, { color: textColor }]}>
             {task.description || 'No description provided.'}
@@ -63,3 +68,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
+

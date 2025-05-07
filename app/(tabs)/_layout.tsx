@@ -1,4 +1,5 @@
-// app\(tabs)\_layout
+// app/(tabs)/_layout.tsx
+
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
@@ -12,23 +13,23 @@ import { useTasks } from '../../contexts/TaskContext';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { tasks } = useTasks(); // Consume the context
+  const { tasks } = useTasks(); // Access task context if needed
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: true,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
+            position: 'absolute', // Transparent background for blur effect
           },
           default: {},
         }),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="(home)"
         options={{

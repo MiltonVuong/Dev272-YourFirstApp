@@ -1,9 +1,11 @@
+// app/(tabs)/explore.tsx
+
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { useThemeColor } from '../../hooks/useThemeColor';
 import { useRouter } from 'expo-router';
 
-export default function Explore() {
+export default function ExploreScreen() {
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
   const router = useRouter();
