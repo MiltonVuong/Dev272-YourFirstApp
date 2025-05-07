@@ -1,4 +1,4 @@
-//app\(tabs)\_layout
+// app\(tabs)\_layout
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
@@ -8,7 +8,7 @@ import { IconSymbol } from '../../components/ui/IconSymbol';
 import TabBarBackground from '../../components/ui/TabBarBackground';
 import { Colors } from '../../constants/Colors';
 import { useColorScheme } from '../../hooks/useColorScheme';
-import { useTasks } from '../_layout.tsx'; // Corrected import path
+import { useTasks } from '../../contexts/TaskContext';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();

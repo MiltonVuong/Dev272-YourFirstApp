@@ -1,49 +1,58 @@
-//app\(tabs)\(home)\index
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, ScrollView, FlatList, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useTasks } from '../../_layout.tsx'; // Corrected import path
+import { useTasks } from '../../../contexts/TaskContext';
+import { useThemeColor } from '../../../hooks/useThemeColor';
 
 export default function App() {
   const [search, setSearch] = useState('');
-  const { tasks, setTasks } = useTasks(); // Use context instead of local state
+  const { tasks, setTasks } = useTasks();
   const [filteredData, setFilteredData] = useState(tasks);
   const router = useRouter();
 
+  // Use theme colors
+  const backgroundColor = useThemeColor({}, 'background');
+  const textColor = useThemeColor({}, 'text');
+  const borderColor = useThemeColor({}, 'icon');
 
   useEffect(() => {
-    setFilteredData(tasks);
-  }, [tasks]);
-
-  const handleSearch = () => {
-    const filtered = tasks.filter(item => item.title.toLowerCase().includes(search.toLowerCase()));
+    const filtered = tasks.filter(item =>
+      item.title.toLowerCase().includes(search.toLowerCase())
+    );
     setFilteredData(filtered);
-  };
-
-  const handleItemPress = (item) => {
-    router.push({
-      pathname: '/(tabs)/(home)/[title]',
-      params: { title: item.title },
-    });
-  };
+  }, [search, tasks]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>2Y Routine</Text>
+    <ScrollView contentContainerStyle={[styles.container, { backgroundColor }]}>
+      <Text style={[styles.title, { color: textColor }]}>2Y Routine</Text>
       <TextInput
-        style={styles.searchBar}
+        style={[
+          styles.searchBar,
+          {
+            borderColor,
+            color: textColor,
+            backgroundColor: backgroundColor === '#151718' ? '#222' : '#fff',
+          },
+        ]}
         placeholder="Search..."
+        placeholderTextColor={borderColor}
         value={search}
         onChangeText={setSearch}
       />
-      <Button title="Search" onPress={handleSearch} />
+      <Button title="Search" onPress={() => {}} />
+      <Button title="Add New Task" onPress={() => router.push('/(tabs)/(home)/add')} />
       <FlatList
         data={filteredData}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Text style={styles.item}>{item.title}</Text>
-            <Button title="Press me" onPress={() => handleItemPress(item)} />
+          <View style={[styles.itemContainer, { borderBottomColor: borderColor }]}>
+            <Text style={[styles.item, { color: textColor }]}>{item.title}</Text>
+            <Button
+              title="Press me"
+              onPress={() =>
+                router.push({ pathname: '/(tabs)/(home)/[title]', params: { title: item.title } })
+              }
+            />
           </View>
         )}
       />
@@ -55,7 +64,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 16,
-    backgroundColor: '#f8f8f8',
   },
   title: {
     fontSize: 24,
@@ -64,7 +72,6 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     height: 40,
-    borderColor: '#ccc',
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
@@ -75,10 +82,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
   },
   item: {
     fontSize: 18,
   },
 });
+
 
