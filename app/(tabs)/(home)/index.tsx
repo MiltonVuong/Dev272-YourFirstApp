@@ -1,10 +1,10 @@
 // app/(tabs)/(home)/index.tsx
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, ScrollView, FlatList, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTasks } from '../../../contexts/TaskContext';
 import { useThemeColor } from '../../../hooks/useThemeColor';
+import Card from '../../../components/Card';
 
 export default function HomeScreen() {
   const [search, setSearch] = useState('');
@@ -51,15 +51,11 @@ export default function HomeScreen() {
         data={filteredTasks}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={[styles.itemContainer, { borderBottomColor: borderColor }]}>
-            <Text style={[styles.itemText, { color: textColor }]}>{item.title}</Text>
-            <Button
-              title="View"
-              onPress={() =>
-                router.push({ pathname: '/(tabs)/(home)/[title]', params: { title: item.title } })
-              }
-            />
-          </View>
+          <Card
+            title={item.title}
+            description={item.description}
+            dueDate={item.dueDate}
+          />
         )}
       />
     </ScrollView>
@@ -81,16 +77,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-  },
-  itemText: {
-    fontSize: 18,
   },
 });
 

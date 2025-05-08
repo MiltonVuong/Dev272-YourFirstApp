@@ -1,19 +1,20 @@
 // app/(tabs)/(home)/add.tsx
-
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTasks } from '../../../contexts/TaskContext';
 import { useThemeColor } from '../../../hooks/useThemeColor';
+import FormInput from '../../../components/FormInput';
+import { useValidation } from '../../../hooks/useValidation';
 
 export default function AddTaskScreen() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [errors, setErrors] = useState<{ title?: string; dueDate?: string }>({});
 
   const { tasks, setTasks } = useTasks();
   const router = useRouter();
+  const { errors, validate } = useValidation();
 
   // Themed colors
   const backgroundColor = useThemeColor({}, 'background');
@@ -36,23 +37,9 @@ export default function AddTaskScreen() {
     return formatted;
   };
 
-  // Validate form inputs
-  const validate = () => {
-    const newErrors: typeof errors = {};
-    if (!title.trim()) newErrors.title = 'Title is required.';
-
-    const dateTimeRegex = /^(0[1-9]|1[0-2]):[0-5][0-9] (AM|PM) (0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])-\d{4}$/;
-    if (dueDate && !dateTimeRegex.test(dueDate)) {
-      newErrors.dueDate = 'Format must be hh:mm AM/PM MM-DD-YYYY';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   // Handle form submission
   const handleSubmit = () => {
-    if (!validate()) return;
+    if (!validate(title, dueDate)) return;
 
     const newTask = {
       id: Date.now().toString(),
@@ -67,36 +54,34 @@ export default function AddTaskScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <Text style={[styles.label, { color: textColor }]}>Title *</Text>
-      <TextInput
-        style={[styles.input, { borderColor, color: textColor }]}
+      <FormInput
+        label="Title *"
         value={title}
         onChangeText={setTitle}
         placeholder="Enter title"
-        placeholderTextColor={borderColor}
+        error={errors.title}
+        borderColor={borderColor}
+        textColor={textColor}
+        errorColor={errorColor}
       />
-      {errors.title && <Text style={[styles.errorText, { color: errorColor }]}>{errors.title}</Text>}
-
-      <Text style={[styles.label, { color: textColor }]}>Description</Text>
-      <TextInput
-        style={[styles.input, { borderColor, color: textColor }]}
+      <FormInput
+        label="Description"
         value={description}
         onChangeText={setDescription}
         placeholder="Enter description"
-        placeholderTextColor={borderColor}
+        borderColor={borderColor}
+        textColor={textColor}
       />
-
-      <Text style={[styles.label, { color: textColor }]}>Due Date & Time</Text>
-      <TextInput
-        style={[styles.input, { borderColor, color: textColor }]}
+      <FormInput
+        label="Due Date & Time"
         value={dueDate}
         onChangeText={(text) => setDueDate(formatDateTimeInput(text))}
         placeholder="hh:mm AM/PM MM-DD-YYYY"
-        placeholderTextColor={borderColor}
-        maxLength={22}
+        error={errors.dueDate}
+        borderColor={borderColor}
+        textColor={textColor}
+        errorColor={errorColor}
       />
-      {errors.dueDate && <Text style={[styles.errorText, { color: errorColor }]}>{errors.dueDate}</Text>}
-
       <Button title="Add Task" onPress={handleSubmit} />
     </View>
   );
@@ -104,18 +89,4 @@ export default function AddTaskScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
-  label: { fontSize: 16, fontWeight: 'bold', marginTop: 10 },
-  input: {
-    borderWidth: 1,
-    padding: 10,
-    marginTop: 5,
-    borderRadius: 5,
-  },
-  errorText: {
-    fontSize: 14,
-    marginTop: 4,
-  },
 });
-
-
-
