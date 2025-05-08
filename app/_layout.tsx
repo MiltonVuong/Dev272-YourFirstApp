@@ -11,6 +11,10 @@ import 'react-native-reanimated';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { TaskProvider } from '../contexts/TaskContext';
 
+// const queryClient = new QueryClient();
+// handle initial supabase auth
+
+
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
