@@ -10,7 +10,7 @@ export default function HomeStackLayout() {
       }}
     >
       <Stack.Screen name="index" options={{ title: 'Home' }} />
-      <Stack.Screen name="[title]" options={{ title: 'Task Details' }} />
+      <Stack.Screen name="[id]" options={{ title: 'Task Details' }} />
       <Stack.Screen name="add" options={{ title: 'Add Task' }} />
     </Stack>
   );

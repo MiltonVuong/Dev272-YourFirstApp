@@ -1,38 +1,27 @@
 // components/Card.tsx
+
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeColor } from '../hooks/useThemeColor';
 
 interface CardProps {
+  id: string;
   title: string;
-  dueDate: string;
 }
 
-const Card: React.FC<CardProps> = ({ title, dueDate }) => {
+const Card: React.FC<CardProps> = ({ id, title }) => {
   const router = useRouter();
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'icon');
 
-  // Extract time portion from dueDate
-  let time = '';
-  if (dueDate) {
-    const parts = dueDate.split(' ');
-    if (parts.length >= 2) {
-      time = parts[0] + ' ' + parts[1];
-    }
-  }
-
   return (
     <View style={[styles.card, { borderColor }]}>
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: textColor }]}>{title}</Text>
-        <Text style={[styles.dueDate, { color: textColor }]}>{time}</Text>
-      </View>
+      <Text style={[styles.title, { color: textColor }]}>{title}</Text>
       <Button
         title="Details"
         onPress={() =>
-          router.push({ pathname: '/(tabs)/(home)/[title]', params: { title } })
+          router.push({ pathname: '/(tabs)/(home)/[id]', params: { id } })
         }
       />
     </View>
@@ -46,18 +35,9 @@ const styles = StyleSheet.create({
     padding: 16,
     marginVertical: 8,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  dueDate: {
-    fontSize: 14,
-    color: 'gray',
   },
 });
 

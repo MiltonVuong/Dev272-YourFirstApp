@@ -1,4 +1,5 @@
 // app/(tabs)/(home)/index.tsx
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, ScrollView, FlatList, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -12,13 +13,13 @@ export default function HomeScreen() {
   const [filteredTasks, setFilteredTasks] = useState(tasks);
   const router = useRouter();
 
-  // Themed colors
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'icon');
 
-  // Filter tasks based on search input
   useEffect(() => {
+    if (!tasks) return;
+
     const filtered = tasks.filter(task =>
       task.title.toLowerCase().includes(search.toLowerCase())
     );
@@ -52,8 +53,8 @@ export default function HomeScreen() {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <Card
+            id={item.id}
             title={item.title}
-            description={item.description}
             dueDate={item.dueDate}
           />
         )}
@@ -79,5 +80,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
 });
-
-

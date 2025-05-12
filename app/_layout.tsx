@@ -5,15 +5,13 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '../hooks/useColorScheme';
 import { TaskProvider } from '../contexts/TaskContext';
 
-// const queryClient = new QueryClient();
-// handle initial supabase auth
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -24,7 +22,8 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  // Hide splash screen once fonts are loaded
+  const [queryClient] = useState(() => new QueryClient());
+
   useEffect(() => {
     if (fontsLoaded) {
       SplashScreen.hideAsync();
@@ -34,14 +33,16 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <TaskProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </TaskProvider>
+    <QueryClientProvider client={queryClient}>
+      <TaskProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </TaskProvider>
+    </QueryClientProvider>
   );
 }
