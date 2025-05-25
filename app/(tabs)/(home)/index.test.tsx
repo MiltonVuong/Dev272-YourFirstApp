@@ -9,7 +9,7 @@ jest.mock('expo-router', () => ({
 }));
 
 jest.mock('../../../hooks/useThemeColor', () => ({
-  useThemeColor: (_props: any, colorName: string) => {
+  useThemeColor: (_props: unknown, colorName: string) => {
     const colors = {
       background: '#fff',
       text: '#000',
