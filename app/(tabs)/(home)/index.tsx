@@ -1,7 +1,14 @@
 // app/(tabs)/(home)/index.tsx
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, ScrollView, FlatList, StyleSheet } from 'react-native';
+import {
+  Text,
+  TextInput,
+  Button,
+  ScrollView,
+  FlatList,
+  StyleSheet,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTasks } from '../../../contexts/TaskContext';
 import { useThemeColor } from '../../../hooks/useThemeColor';
@@ -20,8 +27,8 @@ export default function HomeScreen() {
   useEffect(() => {
     if (!tasks) return;
 
-    const filtered = tasks.filter(task =>
-      task.title.toLowerCase().includes(search.toLowerCase())
+    const filtered = tasks.filter((task) =>
+      task.title.toLowerCase().includes(search.toLowerCase()),
     );
     setFilteredTasks(filtered);
   }, [search, tasks]);
@@ -46,17 +53,16 @@ export default function HomeScreen() {
       />
 
       <Button title="Search" onPress={() => {}} />
-      <Button title="Add New Task" onPress={() => router.push('/(tabs)/(home)/add')} />
+      <Button
+        title="Add New Task"
+        onPress={() => router.push('/(tabs)/(home)/add')}
+      />
 
       <FlatList
         data={filteredTasks}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <Card
-            id={item.id}
-            title={item.title}
-            dueDate={item.dueDate}
-          />
+          <Card id={item.id} title={item.title} dueDate={item.dueDate} />
         )}
       />
     </ScrollView>

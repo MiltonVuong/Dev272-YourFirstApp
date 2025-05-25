@@ -33,7 +33,9 @@ const FormInput: React.FC<FormInputProps> = ({
         placeholder={placeholder}
         placeholderTextColor={borderColor}
       />
-      {error && <Text style={[styles.errorText, { color: errorColor }]}>{error}</Text>}
+      {error && (
+        <Text style={[styles.errorText, { color: errorColor }]}>{error}</Text>
+      )}
     </View>
   );
 };

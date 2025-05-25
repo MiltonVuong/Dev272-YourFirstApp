@@ -1,19 +1,34 @@
-// contexts/TaskContext.tsx
-
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGetTasks } from '../hooks/useGetTasks';
+import { Task } from '../types'; // Adjust the path if needed
 
-const TaskContext = createContext();
+interface TaskContextType {
+  tasks: Task[];
+  setTasks: (tasks: Task[]) => void;
+  isLoading: boolean;
+  error: Error | null;
+}
 
-export const TaskProvider = ({ children }) => {
-  const [tasks, setTasks] = useState([]);
+interface TaskProviderProps {
+  children: ReactNode;
+}
+
+const TaskContext = createContext<TaskContextType | undefined>(undefined);
+
+export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const { data: fetchedTasks, error: fetchError } = useGetTasks();
 
-  // Load cached tasks on mount
   useEffect(() => {
     const loadCachedTasks = async () => {
       try {
@@ -31,12 +46,11 @@ export const TaskProvider = ({ children }) => {
     loadCachedTasks();
   }, []);
 
-  // Update tasks and cache when fetched from Supabase
   useEffect(() => {
     if (fetchedTasks) {
       setTasks(fetchedTasks);
-      AsyncStorage.setItem('tasks', JSON.stringify(fetchedTasks)).catch(err =>
-        console.error('Failed to cache tasks:', err)
+      AsyncStorage.setItem('tasks', JSON.stringify(fetchedTasks)).catch((err) =>
+        console.error('Failed to cache tasks:', err),
       );
     }
 
@@ -52,4 +66,10 @@ export const TaskProvider = ({ children }) => {
   );
 };
 
-export const useTasks = () => useContext(TaskContext);
+export const useTasks = () => {
+  const context = useContext(TaskContext);
+  if (!context) {
+    throw new Error('useTasks must be used within a TaskProvider');
+  }
+  return context;
+};

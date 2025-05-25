@@ -79,3 +79,4 @@ useEffect(() => {
     AsyncStorage.setItem('tasks', JSON.stringify(fetchedTasks));
   }
 }, [fetchedTasks]);
+```

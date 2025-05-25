@@ -14,7 +14,7 @@ export default function TaskDetailScreen() {
   const textColor = useThemeColor({}, 'text');
   const errorColor = useThemeColor({ light: 'red', dark: '#ff6b6b' }, 'text');
 
-  const task = tasks.find(t => t.id.toString() === id);
+  const task = tasks.find((t) => t.id.toString() === id);
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
@@ -35,7 +35,9 @@ export default function TaskDetailScreen() {
           <Button title="Go Back" onPress={() => router.back()} />
         </>
       ) : (
-        <Text style={[styles.error, { color: errorColor }]}>Task not found.</Text>
+        <Text style={[styles.error, { color: errorColor }]}>
+          Task not found.
+        </Text>
       )}
     </View>
   );

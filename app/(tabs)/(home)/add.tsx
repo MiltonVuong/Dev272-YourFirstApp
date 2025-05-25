@@ -55,7 +55,11 @@ export default function AddTaskScreen() {
         borderColor={borderColor}
         textColor={textColor}
       />
-      <Button title={isPending ? 'Adding...' : 'Add Task'} onPress={handleSubmit} disabled={isPending} />
+      <Button
+        title={isPending ? 'Adding...' : 'Add Task'}
+        onPress={handleSubmit}
+        disabled={isPending}
+      />
     </View>
   );
 }
